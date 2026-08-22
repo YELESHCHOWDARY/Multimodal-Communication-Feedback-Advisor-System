@@ -1,0 +1,70 @@
+/* Import Google Font for a modern look. This should always be at the top. */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* --- General Body & Layout --- */
+body {
+    font-family: 'Poppins', sans-serif;
+    /* A subtle gradient background for a modern tech feel */
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Use min-height to ensure content fits on all screen sizes */
+    margin: 0;
+}
+
+/* --- Authentication Card Styling --- */
+.auth-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 2rem;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 15px; /* Softer, modern corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* A more pronounced shadow */
+}
+
+/* --- Typography --- */
+.card-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.5rem !important; /* Extra space for a cleaner look */
+}
+
+/* --- Form Elements --- */
+.form-control {
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    border-color: #0d6efd; /* Highlight focus with Bootstrap's primary blue */
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.2);
+}
+
+/* --- Buttons & Links --- */
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+    padding: 0.85rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7; /* A slightly darker blue on hover */
+}
+
+.text-center a {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 500;
+    transition: text-decoration 0.3s ease;
+}
+
+.text-center a:hover {
+    text-decoration: underline;
+}

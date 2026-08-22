@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - Multimodal Feedback Advisor</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    html {
+      scroll-behavior: smooth; /* ✅ Smooth scrolling */
+    }
+
+    body {
+      margin: 0;
+      padding-top: 74px; /* ✅ Space for fixed navbar */
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top right, #fdf2f8, transparent),
+        radial-gradient(circle at bottom left, #e0e7ff, transparent);
+      overflow-x: hidden;
+    }
+
+    /* ✅ Floating background bubbles */
+    .bg-bubble {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(24px);
+      opacity: 0.45;
+      z-index: 0;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .bubble1 {
+      width: 320px;
+      height: 320px;
+      background: #8b5cf6;
+      top: -100px;
+      left: -90px;
+    }
+
+    .bubble2 {
+      width: 280px;
+      height: 280px;
+      background: #3b82f6;
+      bottom: -100px;
+      right: -80px;
+      animation-delay: 1.6s;
+    }
+
+    .bubble3 {
+      width: 200px;
+      height: 200px;
+      background: #22c55e;
+      top: 65%;
+      left: 18%;
+      animation-delay: 2.8s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-16px); }
+    }
+
+    /* ✅ Navbar */
+    .navbar {
+      height: 74px;
+      background: rgba(17, 24, 39, 0.92) !important;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 3px 14px rgba(0,0,0,0.18);
+      z-index: 10;
+    }
+
+    .navbar-brand {
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-link {
+      font-weight: 700;
+      color: rgba(255,255,255,0.9) !important;
+      margin-right: 10px;
+    }
+
+    .nav-link:hover {
+      color: white !important;
+    }
+
+    .btn-nav {
+      padding: 10px 18px;
+      font-weight: 800;
+      border-radius: 14px;
+    }
+
+    .btn-signup {
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      border: none;
+      color: white;
+      box-shadow: 0 10px 22px rgba(99,102,241,0.25);
+    }
+
+    .btn-signup:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    /* ✅✅✅ LOGIN STYLE CARD BORDER (Thin Purple Line) ✅✅✅ */
+    .login-border-card {
+      position: relative;
+      border-radius: 28px;
+      padding: 2px; /* ✅ Thin purple line */
+      background: linear-gradient(135deg, rgba(139,92,246,0.65), rgba(99,102,241,0.65));
+      box-shadow: 0 20px 55px rgba(0,0,0,0.10);
+      transition: all 0.25s ease;
+    }
+
+    .login-border-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 65px rgba(0,0,0,0.12);
+    }
+
+    .inside-card {
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(16px);
+      padding: 30px;
+      border: 1px solid rgba(229,231,235,0.55);
+    }
+
+    /* ✅ Hero Section */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: 70px 0 90px;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-weight: 900;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: #111827;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      margin-top: 16px;
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: #374151;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-buttons {
+      margin-top: 26px;
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-hero {
+      border-radius: 16px;
+      padding: 12px 22px;
+      font-weight: 900;
+      font-size: 1rem;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary-hero {
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      border: none;
+      box-shadow: 0 16px 32px rgba(99,102,241,0.22);
+      color: white;
+    }
+
+    .btn-primary-hero:hover {
+      opacity: 0.96;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-hero {
+      border: 2px solid rgba(99, 102, 241, 0.35);
+      background: rgba(255,255,255,0.35);
+      color: #3730a3;
+    }
+
+    .btn-outline-hero:hover {
+      background: rgba(99, 102, 241, 0.08);
+      transform: translateY(-2px);
+    }
+
+    /* ✅ Section Headings */
+    .section-title {
+      font-weight: 900;
+      color: #111827;
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: #374151;
+      font-weight: 500;
+      max-width: 760px;
+      margin: auto;
+      margin-bottom: 40px;
+      font-size: 1.05rem;
+    }
+
+    /* ✅ Feature Icon */
+    .feature-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.18), rgba(139,92,246,0.18));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: #4f46e5;
+      margin-bottom: 18px;
+    }
+
+    .feature-title {
+      font-weight: 900;
+      color: #111827;
+      margin-bottom: 10px;
+      font-size: 1.25rem;
+    }
+
+    .feature-text {
+      color: #374151;
+      font-weight: 500;
+      margin-bottom: 0;
+      font-size: 1rem;
+    }
+
+    /* ✅ About Section inner metrics card */
+    .mini-metrics-card {
+      border-radius: 22px;
+      padding: 26px;
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(229,231,235,0.55);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.06);
+    }
+
+    /* ✅ Footer */
+    footer {
+      margin-top: 60px;
+      padding: 22px 0;
+      background: rgba(17, 24, 39, 0.95);
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* ✅ Responsive */
+    @media (max-width: 768px) {
+      .inside-card {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ✅ Background bubbles -->
+<div class="bg-bubble bubble1"></div>
+<div class="bg-bubble bubble2"></div>
+<div class="bg-bubble bubble3"></div>
+
+<!-- ✅ FIX: Reset token only once per index-page visit -->
+<script>
+(async function secureIndexPage() {
+    if (!sessionStorage.getItem("index_loaded")) {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("username");
+        sessionStorage.setItem("index_loaded", "true");
+    }
+
+    const token = localStorage.getItem("access_token");
+    if (!token) return;
+
+    const res = await fetch("/verify_token", {
+        headers: { Authorization: "Bearer " + token }
+    });
+
+    if (res.ok) {
+        window.location.href = "/practice";
+    } else {
+        localStorage.clear();
+    }
+})();
+</script>
+
+<!-- ✅ NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">Speak with Confidence</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMenu">
+      <ul class="navbar-nav ms-auto align-items-lg-center mt-3 mt-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="#features">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#about">About</a>
+        </li>
+
+        <li class="nav-item mt-2 mt-lg-0">
+          <a class="btn btn-outline-light btn-nav me-lg-2" href="/login">Login</a>
+        </li>
+        <li class="nav-item mt-2 mt-lg-0">
+          <a class="btn btn-signup btn-nav" href="/signup">Sign Up</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ✅ HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="login-border-card">
+      <div class="inside-card text-center">
+        <h1 class="hero-title">AI-Powered Communication Feedback</h1>
+        <p class="hero-subtitle">
+          Enhance your interpersonal communication skills with an AI-driven multimodal feedback advisory system
+          that analyzes both your facial expressions and vocal features.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="/signup" class="btn btn-hero btn-primary-hero">
+            Get Started
+          </a>
+          <a href="#features" class="btn btn-hero btn-outline-hero">
+            Explore Features
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ✅ FEATURES -->
+<section class="py-5" id="features">
+  <div class="container">
+    <h2 class="section-title">Why Our System?</h2>
+    <p class="section-subtitle">
+      A smarter way to practice communication, evaluate progress, and build confidence using AI.
+    </p>
+
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <div class="login-border-card h-100">
+          <div class="inside-card h-100">
+            <div class="feature-icon">📈</div>
+            <div class="feature-title">Objective Feedback</div>
+            <p class="feature-text">
+              Overcome subjective and inconsistent feedback. Get quantitative insights and improvement suggestions.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="login-border-card h-100">
+          <div class="inside-card h-100">
+            <div class="feature-icon">🤖</div>
+            <div class="feature-title">Multimodal Analysis</div>
+            <p class="feature-text">
+              Evaluate both speech and facial expressions for complete communication performance analysis.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="login-border-card h-100">
+          <div class="inside-card h-100">
+            <div class="feature-icon">💻</div>
+            <div class="feature-title">Accessible Anywhere</div>
+            <p class="feature-text">
+              Works directly in your browser with webcam and microphone—no installation required.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ✅ ABOUT -->
+<section class="py-5" id="about">
+  <div class="container">
+    <h2 class="section-title">About the Project</h2>
+    <p class="section-subtitle">
+      Built to help students and professionals improve communication skills using modern AI techniques.
+    </p>
+
+    <div class="login-border-card">
+      <div class="inside-card">
+        <div class="row g-4 align-items-center">
+
+          <div class="col-md-6">
+            <h4 class="fw-bold" style="color:#111827;">
+              Practice → Analyze → Improve
+            </h4>
+            <p style="color:#374151;font-weight:500;">
+              This project provides instant performance evaluation based on voice and facial behavior
+              to improve your confidence and clarity while speaking.
+            </p>
+            <p style="color:#374151;font-weight:500;margin-bottom:0;">
+              Track sessions, visualize progress, and get suggestions to improve consistently.
+            </p>
+          </div>
+
+          <div class="col-md-6 text-center">
+            <div class="mini-metrics-card">
+              <h5 class="fw-bold mb-2" style="color:#3730a3;">Performance Metrics</h5>
+              <p class="mb-0" style="color:#374151;font-weight:600;">
+                Eye Contact • Posture • Hand Gestures • Fluency • Confidence • Tone • Pace
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ✅ FOOTER -->
+<footer>
+  <p class="mb-0">&copy; 2025 LBRCE AI&DS - Batch 3</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.video-container {
+    position: relative;
+    background-color: #000;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 3px solid #dee2e6;
+}
+
+#webcam-feed {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#status-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.feedback-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #0d6efd; /* Bootstrap primary blue */
+}
+
+.card {
+    border: none;
+}
+/* style.css */
+
+/* Global body styling for a slightly softer background */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Video container with a fixed aspect ratio and proper positioning for the overlay */
+.video-container {
+    position: relative;
+    width: 100%;
+    /* 16:9 Aspect Ratio (9 / 16 * 100 = 56.25%) */
+    padding-bottom: 56.25%; 
+    background-color: #000; /* Black background for video placeholder */
+}
+
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the video covers the container without stretching */
+}
+
+/* Status overlay for "Ready" / "Analyzing" */
+#status-overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: .5rem 1rem;
+    font-size: 1.1rem;
+    border-radius: .3rem;
+    z-index: 10; /* Ensure it's above the video */
+}
+
+/* Style for the live feedback text */
+.feedback-text {
+    min-height: 2.5em; /* Ensures a consistent height even when content is short */
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+/* Custom styling for the Improvement Suggestion text */
+#suggestion-feedback {
+    color: #495057; /* Darker text for readability */
+    font-style: italic;
+    min-height: 4em; /* Give more space for the suggestion */
+}
+
+/* Enhance card styling with subtle transitions */
+.card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Optional: Slight hover effect on cards */
+.card:hover {
+    /* transform: translateY(-2px); */
+    /* box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important; */
+}
+
+/* Better button sizing for mobile and desktop */
+.btn-lg {
+    min-width: 200px;
+}
+
+/* Timer styling */
+#timer h5 {
+    font-size: 1.5rem;
+}

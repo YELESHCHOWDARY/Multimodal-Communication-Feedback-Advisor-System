@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Communication Skills Practice</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #ede9fe, #e0e7ff, #f8fafc);
+    }
+
+    /* ✅ Background bubbles (same as Login) */
+    .bg-bubble {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(20px);
+      opacity: 0.5;
+      z-index: 0;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .bubble1 {
+      width: 340px;
+      height: 340px;
+      background: #8b5cf6;
+      top: -110px;
+      left: -90px;
+    }
+
+    .bubble2 {
+      width: 300px;
+      height: 300px;
+      background: #3b82f6;
+      bottom: -100px;
+      right: -80px;
+      animation-delay: 1.5s;
+    }
+
+    .bubble3 {
+      width: 220px;
+      height: 220px;
+      background: #22c55e;
+      top: 65%;
+      left: 15%;
+      animation-delay: 2.2s;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(-18px); }
+    }
+
+    /* ✅ Navbar */
+    .top-navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1050;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .top-navbar h4 {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #111827;
+    }
+
+    /* ✅ Sidebar */
+    .sidebar {
+      width: 280px;
+      position: fixed;
+      top: 0;
+      left: -280px;
+      bottom: 0;
+      background: rgba(33, 37, 41, 0.97);
+      color: white;
+      padding-top: 70px;
+      z-index: 1040;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 6px 0 18px rgba(0, 0, 0, 0.25);
+      transition: left 0.3s ease;
+    }
+
+    .sidebar.show { left: 0; }
+
+    .sidebar-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .sidebar-header h5 {
+      font-size: 1.3rem;
+      font-weight: 900;
+    }
+
+    .sidebar .nav-link {
+      color: #cbd5e1;
+      padding: 14px 22px;
+      border-radius: 14px;
+      margin: 6px 12px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar .nav-link:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(6px);
+      color: white;
+    }
+
+    .sidebar .nav-link.active {
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      color: white;
+    }
+
+    /* ✅ Main content fit */
+    .main-content {
+      position: absolute;
+      top: 70px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      padding: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      z-index: 1;
+    }
+
+    .practice-grid {
+      width: 100%;
+      max-width: 1350px;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 18px;
+    }
+
+    /* ✅✅✅ LOGIN STYLE THIN PURPLE BORDER CARD ✅✅✅ */
+    .login-border-card {
+      height: 100%;
+      border-radius: 28px;
+      padding: 2px; /* ✅ thin border line */
+      background: linear-gradient(135deg, rgba(139,92,246,0.65), rgba(99,102,241,0.65));
+      box-shadow: 0 20px 55px rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    .inside-card {
+      height: 100%;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(18px);
+      padding: 20px;
+      border: 1px solid rgba(229, 231, 235, 0.55);
+      overflow: hidden;
+    }
+
+    /* ✅ Video container */
+    .video-container {
+      border-radius: 22px;
+      overflow: hidden;
+      background: linear-gradient(145deg, #000, #1a1a1a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.25rem;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
+      position: relative;
+      height: 100%;
+      min-height: 340px;
+    }
+
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* ✅ Headings */
+    .panel-title {
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #111827;
+      margin: 0;
+    }
+
+    .timer-text {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #111827;
+    }
+
+    /* ✅ Buttons */
+    .btn-modern {
+      min-width: 190px;
+      padding: 12px 18px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 1rem;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+      border: none;
+    }
+
+    .btn-modern:hover {
+      opacity: 0.96;
+      transform: translateY(-2px);
+    }
+
+    .btn-gradient {
+      background: linear-gradient(90deg, #8b5cf6, #6366f1);
+      color: white;
+      box-shadow: 0 15px 30px rgba(99,102,241,0.22);
+    }
+
+    /* ✅ Feedback box scroll */
+    .feedback-scroll {
+      overflow-y: auto;
+      padding-right: 10px;
+      height: calc(100% - 52px);
+    }
+
+    .feedback-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .feedback-scroll::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.35);
+      border-radius: 20px;
+    }
+
+    .progress {
+      height: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* ✅ Alignment for feedback results */
+    .feedback-section {
+      margin-bottom: 16px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-size: 0.98rem;
+    }
+
+    .metric-row strong {
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .metric-row span {
+      font-weight: 800;
+      color: #111827;
+      min-width: 60px;
+      text-align: right;
+    }
+
+    /* ✅ Suggestion block */
+    .suggestion-box {
+      margin-top: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(99,102,241,0.08);
+      border: 1px solid rgba(99,102,241,0.18);
+      font-weight: 600;
+    }
+
+    /* ✅ Mobile responsive */
+    @media (max-width: 992px) {
+      body {
+        overflow: auto;
+        height: auto;
+      }
+      .main-content {
+        position: relative;
+        height: auto;
+        overflow: visible;
+      }
+      .practice-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      .video-container {
+        min-height: 260px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ✅ Background bubbles -->
+<div class="bg-bubble bubble1"></div>
+<div class="bg-bubble bubble2"></div>
+<div class="bg-bubble bubble3"></div>
+
+<!-- ✅ SECURE TOKEN CHECK LIKE HISTORY PAGE -->
+<script>
+function logout() {
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.href = "/";
+}
+
+async function secureCheck() {
+  const token = localStorage.getItem("access_token");
+  const localUser = localStorage.getItem("username");
+
+  if (!token || !localUser) {
+    localStorage.clear();
+    window.location.href = "/login";
+    return;
+  }
+
+  const res = await fetch("/verify_token", {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (!res.ok) {
+    localStorage.clear();
+    window.location.href = "/login";
+    return;
+  }
+
+  const data = await res.json();
+  const serverUser = data.username;
+
+  if (serverUser !== localUser) {
+    localStorage.clear();
+    window.location.href = "/login";
+    return;
+  }
+}
+secureCheck();
+</script>
+
+<nav class="top-navbar">
+  <button class="btn btn-outline-dark me-3" type="button" id="sidebarToggle">☰</button>
+  <h4 class="mb-0">Practice Session</h4>
+</nav>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h5 class="fw-bold text-primary mb-0">Speak Confident</h5>
+  </div>
+  <ul class="nav flex-column mt-3">
+    <li class="nav-item"><a class="nav-link" href="/home">🏠 Home</a></li>
+    <li class="nav-item"><a class="nav-link active" href="/practice">🎙️ Practice</a></li>
+    <li class="nav-item"><a class="nav-link" href="/history">📊 History</a></li>
+    <li class="nav-item">
+      <a href="#" class="nav-link text-danger" onclick="logout()">🔒 Logout</a>
+    </li>
+  </ul>
+</div>
+
+<div class="main-content">
+  <div class="practice-grid">
+
+    <!-- ✅ Left video section -->
+    <div class="login-border-card">
+      <div class="inside-card d-flex flex-column">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="panel-title">Communication Skills Practice</h5>
+          <span class="timer-text" id="timerDisplay">00:00</span>
+        </div>
+
+        <div class="video-container" id="videoContainer">
+          <video id="videoPreview" autoplay muted></video>
+          <span id="videoStatus">Ready</span>
+        </div>
+
+        <div class="text-center mt-4">
+          <button id="startBtn" class="btn btn-success btn-modern me-2">Start Recording</button>
+          <button id="stopBtn" class="btn btn-danger btn-modern" disabled>Stop & Analyze</button>
+        </div>
+
+        <div class="text-center mt-3">
+          <button id="saveBtn" class="btn btn-gradient btn-modern me-2" style="display:none;">Save</button>
+          <button id="dontSaveBtn" class="btn btn-secondary btn-modern" style="display:none;">Don't Save</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ✅ Right feedback section -->
+    <div class="login-border-card">
+      <div class="inside-card d-flex flex-column">
+
+        <h5 class="panel-title mb-3">Feedback Results</h5>
+
+        <div class="feedback-scroll">
+
+          <div class="feedback-section">
+            <div class="metric-row">
+              <strong>Eye Contact:</strong>
+              <span id="eye-feedback">--%</span>
+            </div>
+            <div class="progress"><div id="eye-bar" class="progress-bar bg-success"></div></div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="metric-row">
+              <strong>Posture:</strong>
+              <span id="posture-feedback">--%</span>
+            </div>
+            <div class="progress"><div id="posture-bar" class="progress-bar bg-warning"></div></div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="metric-row">
+              <strong>Hand Gestures:</strong>
+              <span id="hand-feedback">--%</span>
+            </div>
+            <div class="progress"><div id="hand-bar" class="progress-bar bg-info"></div></div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="metric-row">
+              <strong>Fluency:</strong>
+              <span id="fluency-feedback">--%</span>
+            </div>
+            <div class="progress"><div id="fluency-bar" class="progress-bar bg-success"></div></div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="metric-row">
+              <strong>Pace:</strong>
+              <span id="pace-feedback">-- WPM</span>
+            </div>
+            <div class="progress"><div id="pace-bar" class="progress-bar bg-secondary"></div></div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="metric-row">
+              <strong>Confidence:</strong>
+              <span id="confidence-feedback">--%</span>
+            </div>
+            <div class="progress"><div id="confidence-bar" class="progress-bar bg-danger"></div></div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="metric-row">
+              <strong>Tone:</strong>
+              <span id="tone-feedback">--%</span>
+            </div>
+            <div class="progress"><div id="tone-bar" class="progress-bar bg-dark"></div></div>
+          </div>
+
+          <div class="feedback-section">
+            <div class="metric-row">
+              <strong>Overall Score:</strong>
+              <span id="overall-feedback">--%</span>
+            </div>
+            <div class="progress"><div id="overall-bar" class="progress-bar bg-primary"></div></div>
+          </div>
+
+          <div class="suggestion-box">
+            <div class="fw-bold mb-1">Suggestion</div>
+            <em id="suggestion-feedback">Record and analyze to receive feedback.</em>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ✅ UPDATED SIDEBAR TOGGLE -->
+<script>
+const sidebar = document.getElementById("sidebar");
+const toggleBtn = document.getElementById("sidebarToggle");
+
+toggleBtn.addEventListener("click", function (e) {
+  e.stopPropagation();
+  sidebar.classList.toggle("show");
+});
+
+document.addEventListener("click", function (e) {
+  if (sidebar.classList.contains("show") && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+    sidebar.classList.remove("show");
+  }
+});
+
+document.addEventListener("touchstart", function (e) {
+  if (sidebar.classList.contains("show") && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+    sidebar.classList.remove("show");
+  }
+});
+</script>
+
+<!-- ✅ YOUR EXISTING RECORDING + ANALYSIS SCRIPT -->
+<script>
+function checkUnauthorized(res) {
+  if (res.status === 401 || res.status === 422) {
+    localStorage.clear();
+    window.location.href = "/login";
+    return true;
+  }
+  return false;
+}
+
+let mediaRecorder, chunks = [], startTime, timerInterval;
+
+const video = document.getElementById('videoPreview');
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const videoStatus = document.getElementById('videoStatus');
+const timerDisplay = document.getElementById('timerDisplay');
+
+const saveBtn = document.getElementById("saveBtn");
+const dontSaveBtn = document.getElementById("dontSaveBtn");
+
+function resetFeedback() {
+  const metrics = ["eye","posture","hand","fluency","pace","confidence","tone","overall"];
+
+  metrics.forEach(id => {
+    document.getElementById(`${id}-feedback`).textContent =
+      id === "pace" ? "-- WPM" : "--%";
+    document.getElementById(`${id}-bar`).style.width = "0%";
+  });
+
+  document.getElementById("suggestion-feedback").textContent =
+    "Record and analyze to receive feedback.";
+
+  saveBtn.style.display = "none";
+  dontSaveBtn.style.display = "none";
+}
+
+function fullResetUI() {
+  resetFeedback();
+  timerDisplay.textContent = "00:00";
+  videoStatus.textContent = "Ready";
+  videoStatus.style.display = "block";
+  video.style.display = "none";
+
+  window.lastRecordedBlob = null;
+  window.lastAnalysisResult = null;
+
+  startBtn.disabled = false;
+  stopBtn.disabled = true;
+}
+
+function updateTimer() {
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+  const s = String(elapsed % 60).padStart(2, '0');
+  timerDisplay.textContent = `${m}:${s}`;
+}
+
+startBtn.onclick = async () => {
+  resetFeedback();
+  videoStatus.textContent = "Ready";
+  videoStatus.style.display = 'block';
+  video.style.display = 'none';
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    video.srcObject = stream;
+    video.style.display = 'block';
+    videoStatus.style.display = 'none';
+
+    mediaRecorder = new MediaRecorder(stream);
+    chunks = [];
+
+    mediaRecorder.ondataavailable = e => chunks.push(e.data);
+
+    mediaRecorder.onstop = async () => {
+      const blob = new Blob(chunks, { type: 'video/webm' });
+      chunks = [];
+
+      window.lastRecordedBlob = blob;
+      await analyzeRecording(blob);
+
+      saveBtn.style.display = "inline-block";
+      dontSaveBtn.style.display = "inline-block";
+    };
+
+    mediaRecorder.start();
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000);
+
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+
+  } catch (err) {
+    alert('Camera/Mic Permission Denied.');
+  }
+};
+
+stopBtn.onclick = () => {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(t => t.stop());
+  }
+  clearInterval(timerInterval);
+
+  stopBtn.disabled = true;
+  startBtn.disabled = false;
+};
+
+async function analyzeRecording(blob) {
+  const token = localStorage.getItem('access_token');
+
+  const formData = new FormData();
+  formData.append("video", blob, "practice.webm");
+
+  video.style.display = 'none';
+  videoStatus.textContent = "Analyzing...";
+  videoStatus.style.display = 'block';
+
+  const res = await fetch('/analyze', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData
+  });
+
+  if (checkUnauthorized(res)) return;
+
+  const data = await res.json();
+  window.lastAnalysisResult = data.results;
+
+  if (!res.ok || !data.results) {
+    videoStatus.textContent = "Error ❌";
+    alert(data.message || "Analysis failed");
+    return;
+  }
+
+  const r = data.results;
+  videoStatus.textContent = "Completed ✅";
+
+  const percentFields = [
+    ["Eye Contact","eye"],["Posture","posture"],["Hand Gestures","hand"],
+    ["Fluency","fluency"],["Confidence","confidence"],
+    ["Tone","tone"],["Overall Score","overall"]
+  ];
+
+  percentFields.forEach(([k, id]) => {
+    const raw = (typeof r[k] === 'number') ? r[k] : 0;
+    const val = Math.round(raw * 100);
+    document.getElementById(`${id}-feedback`).textContent = val + "%";
+    document.getElementById(`${id}-bar`).style.width = val + "%";
+  });
+
+  const pace = typeof r["Pace (WPM)"] === 'number' ? r["Pace (WPM)"] : 0;
+  document.getElementById("pace-feedback").textContent = `${pace} WPM`;
+  document.getElementById("pace-bar").style.width = Math.min(100, Math.round((pace/200)*100)) + "%";
+
+  document.getElementById("suggestion-feedback").textContent = r["Suggestion"] || "";
+}
+
+saveBtn.onclick = async () => {
+  const blob = window.lastRecordedBlob;
+  const analysis = window.lastAnalysisResult;
+
+  if (!blob || !analysis) return alert("Record first!");
+
+  const token = localStorage.getItem("access_token");
+
+  const formData = new FormData();
+  formData.append("video", blob, "saved.webm");
+  formData.append("analysis_result", JSON.stringify(analysis));
+
+  const res = await fetch("/save_history", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData
+  });
+
+  if (checkUnauthorized(res)) return;
+
+  const data = await res.json();
+  alert(data.message || "Saved!");
+
+  saveBtn.style.display = "none";
+  dontSaveBtn.style.display = "none";
+
+  fullResetUI();
+};
+
+dontSaveBtn.onclick = () => {
+  fullResetUI();
+};
+</script>
+
+</body>
+</html>

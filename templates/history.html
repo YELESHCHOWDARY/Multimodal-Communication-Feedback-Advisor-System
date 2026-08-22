@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>History - Performance</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #ede9fe, #e0e7ff, #f8fafc);
+      position: relative;
+    }
+
+    /* ✅ Background bubbles (Login UI) */
+    .bg-bubble {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(20px);
+      opacity: 0.5;
+      z-index: 0;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .bubble1 {
+      width: 340px;
+      height: 340px;
+      background: #8b5cf6;
+      top: -110px;
+      left: -90px;
+    }
+
+    .bubble2 {
+      width: 300px;
+      height: 300px;
+      background: #3b82f6;
+      bottom: -100px;
+      right: -80px;
+      animation-delay: 1.5s;
+    }
+
+    .bubble3 {
+      width: 220px;
+      height: 220px;
+      background: #22c55e;
+      top: 65%;
+      left: 15%;
+      animation-delay: 2.2s;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(-18px); }
+    }
+
+    /* ✅ Navbar */
+    .top-navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1050;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .top-navbar h4 {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #111827;
+    }
+
+    /* ✅ Sidebar */
+    .sidebar {
+      width: 280px;
+      position: fixed;
+      top: 0;
+      left: -280px;
+      bottom: 0;
+      background: rgba(33, 37, 41, 0.97);
+      color: white;
+      padding-top: 70px;
+      z-index: 1040;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 6px 0 18px rgba(0, 0, 0, 0.25);
+      transition: left 0.3s ease;
+    }
+
+    .sidebar.show { left: 0; }
+
+    .sidebar-header {
+      padding: 18px 22px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .sidebar-header h5 {
+      font-size: 1.3rem;
+      font-weight: 900;
+    }
+
+    .sidebar .nav-link {
+      color: #cbd5e1;
+      padding: 14px 22px;
+      border-radius: 14px;
+      margin: 6px 12px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar .nav-link:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(6px);
+      color: white;
+    }
+
+    .sidebar .nav-link.active {
+      background: linear-gradient(90deg, #6366f1, #8b5cf6);
+      color: white;
+    }
+
+    /* ✅ Main content */
+    .main-content {
+      margin-top: 70px;
+      padding: 18px;
+      min-height: calc(100vh - 70px);
+      display: flex;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .history-wrapper {
+      width: 100%;
+      max-width: 1350px;
+    }
+
+    /* ✅ Top actions */
+    .top-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    /* ✅ Buttons like login */
+    .btn-sm-modern {
+      border-radius: 16px;
+      font-weight: 900;
+      padding: 10px 16px;
+      border: none;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+    }
+
+    .btn-sm-modern:hover {
+      opacity: 0.96;
+      transform: translateY(-2px);
+    }
+
+    .btn-gradient {
+      background: linear-gradient(90deg, #8b5cf6, #6366f1);
+      color: white;
+      box-shadow: 0 15px 30px rgba(99,102,241,0.22);
+    }
+
+    /* ✅✅✅ LOGIN UI THIN PURPLE BORDER CARD ✅✅✅ */
+    .login-border-card {
+      border-radius: 28px;
+      padding: 2px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.65), rgba(99,102,241,0.65));
+      box-shadow: 0 20px 55px rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    .inside-card {
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(18px);
+      padding: 24px;
+      border: 1px solid rgba(229, 231, 235, 0.55);
+    }
+
+    /* ✅ Overall Performance centered */
+    .overall-center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    .chart-grid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .chart-container {
+      width: 360px;
+      max-width: 100%;
+    }
+
+    ul.legend-list li {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+      color: #111827;
+      text-align: left;
+    }
+
+    /* ✅ Session card now also Login style border */
+    .session-card {
+      border-radius: 28px;
+      padding: 2px;
+      background: linear-gradient(135deg, rgba(139,92,246,0.65), rgba(99,102,241,0.65));
+      box-shadow: 0 20px 55px rgba(0,0,0,0.10);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .session-inside {
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(229, 231, 235, 0.55);
+      padding: 16px;
+    }
+
+    .video-box {
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.22);
+    }
+
+    .metric-box {
+      background: rgba(249, 250, 251, 0.95);
+      padding: 12px 14px;
+      border-radius: 16px;
+      margin-bottom: 10px;
+      border: 1px solid rgba(229,231,235,0.85);
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ✅ Background bubbles -->
+<div class="bg-bubble bubble1"></div>
+<div class="bg-bubble bubble2"></div>
+<div class="bg-bubble bubble3"></div>
+
+<!-- ✅ TOKEN VALIDATION -->
+<script>
+async function validateAuth() {
+    const token = localStorage.getItem("access_token");
+    const storedUser = localStorage.getItem("username");
+
+    if (!token || !storedUser) {
+        localStorage.clear();
+        window.location.href = "/login";
+        return;
+    }
+
+    const res = await fetch("/verify_token", {
+        headers: { Authorization: "Bearer " + token }
+    });
+
+    if (!res.ok) {
+        localStorage.clear();
+        window.location.href = "/login";
+        return;
+    }
+
+    const data = await res.json();
+
+    if (data.username !== storedUser) {
+        localStorage.clear();
+        window.location.href = "/login";
+    }
+}
+validateAuth();
+</script>
+
+<script>
+function logout() {
+    localStorage.clear();
+    window.location.href = "/";
+}
+</script>
+
+<nav class="top-navbar">
+  <button class="btn btn-outline-dark me-3" type="button" id="sidebarToggle">☰</button>
+  <h4 class="mb-0">Session History</h4>
+</nav>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h5 class="fw-bold text-primary mb-0">Speak Confident</h5>
+  </div>
+  <ul class="nav flex-column mt-3">
+    <li class="nav-item"><a class="nav-link" href="/home">🏠 Home</a></li>
+    <li class="nav-item"><a class="nav-link" href="/practice">🎙️ Practice</a></li>
+    <li class="nav-item"><a class="nav-link active" href="/history">📊 History</a></li>
+    <li class="nav-item">
+      <a href="#" class="nav-link text-danger" onclick="logout()">🔒 Logout</a>
+    </li>
+  </ul>
+</div>
+
+<div class="main-content">
+  <div class="history-wrapper">
+
+    <div class="top-actions">
+      <button class="btn btn-danger btn-sm-modern" id="clearAllBtn">Clear All History</button>
+    </div>
+
+    <!-- ✅ Overall Performance (Login style thin purple border) -->
+    <div class="login-border-card mb-4">
+      <div class="inside-card overall-center">
+        <h3 class="fw-bold mb-3" style="font-weight:900;color:#111827;">
+          Overall Performance
+        </h3>
+
+        <div class="chart-grid">
+          <div class="chart-container">
+            <canvas id="performanceChart"></canvas>
+          </div>
+
+          <div style="min-width: 280px;">
+            <ul class="legend-list list-unstyled mb-3">
+              <li><span style="color:#3B82F6">●</span> Eye Contact — <span id="ecVal">0</span>%</li>
+              <li><span style="color:#06B6D4">●</span> Posture — <span id="poVal">0</span>%</li>
+              <li><span style="color:#22C55E">●</span> Hand Gestures — <span id="hgVal">0</span>%</li>
+              <li><span style="color:#A855F7">●</span> Tone — <span id="toVal">0</span>%</li>
+              <li><span style="color:#F97316">●</span> Fluency — <span id="flVal">0</span>%</li>
+              <li><span style="color:#EAB308">●</span> Confidence — <span id="coVal">0</span>%</li>
+              <li><span style="color:#EF4444">●</span> Overall Score — <span id="osVal">0</span>%</li>
+            </ul>
+
+            <button class="btn btn-gradient btn-sm-modern w-100" onclick="downloadOverallPDF()">
+              Download Overall Performance (PDF)
+            </button>
+          </div>
+        </div>
+
+        <p class="text-center text-muted fw-semibold mt-4 mb-0">
+          Based on all saved responses
+        </p>
+      </div>
+    </div>
+
+    <h4 class="fw-bold mb-3" style="font-weight:900;color:#111827;">
+      Your Saved Sessions
+    </h4>
+
+    <div id="historyList"></div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* ✅ Sidebar Toggle + Click outside close */
+const sidebar = document.getElementById("sidebar");
+const toggleBtn = document.getElementById("sidebarToggle");
+
+toggleBtn.addEventListener("click", function (e) {
+  e.stopPropagation();
+  sidebar.classList.toggle("show");
+});
+
+document.addEventListener("click", function (e) {
+  if (sidebar.classList.contains("show") && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+    sidebar.classList.remove("show");
+  }
+});
+
+document.addEventListener("touchstart", function (e) {
+  if (sidebar.classList.contains("show") && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+    sidebar.classList.remove("show");
+  }
+});
+
+function checkUnauthorized(res) {
+  if (res.status === 401 || res.status === 422) {
+    localStorage.clear();
+    alert("Session Expired — Login again.");
+    window.location.href = "/login";
+    return true;
+  }
+  return false;
+}
+
+const token = localStorage.getItem("access_token");
+Chart.register(ChartDataLabels);
+
+/* ✅ LOAD HISTORY */
+async function loadHistory() {
+  const res = await fetch("/get_history", {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (checkUnauthorized(res)) return;
+
+  const data = await res.json();
+  const container = document.getElementById("historyList");
+  container.innerHTML = "";
+
+  if (!data.length) {
+    container.innerHTML = `<p class="text-muted fw-semibold">No history yet.</p>`;
+    return;
+  }
+
+  data.reverse().forEach(item => {
+    let analysis = item.analysis;
+    try { analysis = JSON.parse(analysis); } catch {}
+
+    const metricsHtml = Object.entries(analysis)
+      .map(([k,v]) => {
+        if (k === "Suggestion") return "";
+        if (k === "Emotion") return "";
+
+        if (k === "Pace (WPM)") return `
+          <div class="metric-box"><strong>${k}:</strong> ${v}</div>
+        `;
+
+        return `
+          <div class="metric-box"><strong>${k}:</strong> ${(v*100).toFixed(1)}%</div>
+        `;
+      }).join("");
+
+    container.innerHTML += `
+      <div class="session-card">
+        <div class="session-inside">
+          <div class="row g-3 align-items-stretch">
+
+            <div class="col-md-4">
+              <div class="video-box">
+                <video controls width="100%" preload="metadata" playsinline>
+                  <source src="/uploads/${item.video_path}" type="video/webm">
+                  Your browser does not support video playback.
+                </video>
+              </div>
+
+              <div class="d-flex justify-content-between gap-2 mt-3">
+                <button class="btn btn-gradient btn-sm-modern w-50" onclick="downloadVideo('${item.video_path}')">
+                  Download
+                </button>
+                <button class="btn btn-danger btn-sm-modern w-50" onclick="deleteOne('${item._id}')">
+                  Delete
+                </button>
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              ${metricsHtml}
+              <div class="metric-box"><strong>Suggestion:</strong> ${analysis["Suggestion"]}</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+/* ✅ DOWNLOAD VIDEO */
+async function downloadVideo(filename) {
+  const res = await fetch(`/download_video/${filename}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  if (checkUnauthorized(res)) return;
+
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+
+  if (!filename.endsWith(".webm") && !filename.endsWith(".mp4")) {
+    a.download = filename + ".webm";
+  } else {
+    a.download = filename;
+  }
+
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ✅ DOWNLOAD PDF */
+async function downloadOverallPDF() {
+  const res = await fetch(`/export_overall_pdf`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
+  if (checkUnauthorized(res)) return;
+
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "overall_performance.pdf";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+/* ✅ DELETE ONE */
+async function deleteOne(id) {
+  if (!confirm("Delete this entry?")) return;
+
+  const res = await fetch(`/delete_history/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (checkUnauthorized(res)) return;
+
+  await loadHistory();
+  await loadChart();
+}
+
+/* ✅ CLEAR ALL */
+document.getElementById("clearAllBtn").onclick = async () => {
+  if (!confirm("Clear all history?")) return;
+
+  const res = await fetch("/clear_history", {
+    method: "DELETE",
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (checkUnauthorized(res)) return;
+
+  await loadHistory();
+  await loadChart();
+};
+
+/* ✅ LOAD CHART */
+async function loadChart() {
+  const res = await fetch("/history_stats", {
+    headers: { Authorization: "Bearer " + token }
+  });
+
+  if (checkUnauthorized(res)) return;
+
+  const data = await res.json();
+
+  if (!data.metrics) {
+    if (window.performanceChart?.destroy) window.performanceChart.destroy();
+    return;
+  }
+
+  const values = [
+    data.metrics["Eye Contact"],
+    data.metrics["Posture"],
+    data.metrics["Hand Gestures"],
+    data.metrics["Tone"],
+    data.metrics["Fluency"],
+    data.metrics["Confidence"],
+    data.metrics["Overall Score"]
+  ];
+
+  document.getElementById("ecVal").textContent = values[0];
+  document.getElementById("poVal").textContent = values[1];
+  document.getElementById("hgVal").textContent = values[2];
+  document.getElementById("toVal").textContent = values[3];
+  document.getElementById("flVal").textContent = values[4];
+  document.getElementById("coVal").textContent = values[5];
+  document.getElementById("osVal").textContent = values[6];
+
+  const ctx = document.getElementById("performanceChart").getContext("2d");
+
+  if (window.performanceChart?.destroy) window.performanceChart.destroy();
+
+  window.performanceChart = new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: [
+        "Eye Contact","Posture","Hand Gestures",
+        "Tone","Fluency","Confidence","Overall Score"
+      ],
+      datasets: [{
+        data: values,
+        backgroundColor: [
+          "#3B82F6","#06B6D4","#22C55E",
+          "#A855F7","#F97316","#EAB308","#EF4444"
+        ],
+        hoverOffset: 12
+      }]
+    },
+    options: {
+      cutout: "62%",
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          color: "#fff",
+          formatter: v => `${Math.round(v)}%`,
+          font: { weight:"800", size: 12 }
+        }
+      }
+    }
+  });
+}
+
+(async () => {
+  await loadHistory();
+  await loadChart();
+})();
+</script>
+
+</body>
+</html>

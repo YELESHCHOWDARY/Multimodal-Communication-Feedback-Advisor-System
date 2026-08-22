@@ -1,0 +1,15 @@
+{
+  "configurations": [
+    {
+      "name": "Python: Flask (Direct Run)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/app.py",
+      "console": "integratedTerminal",
+      "env": {
+        "FLASK_ENV": "development",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  ]
+}
